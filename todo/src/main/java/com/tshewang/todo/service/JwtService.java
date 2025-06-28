@@ -1,8 +1,10 @@
 package com.tshewang.todo.service;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
+
 
 public interface JwtService {
     String extractUsername(String token);
