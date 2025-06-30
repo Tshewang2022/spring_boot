@@ -1,17 +1,14 @@
 package com.tshewang.todo.config;
 
-
 import com.tshewang.todo.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,7 +35,6 @@ public class SecurityConfig {
         return username -> userRepository
                 .findByEmail(username)
                 .orElseThrow(()->new UsernameNotFoundException("User not found"));
-
     }
 
     @Bean
@@ -62,14 +58,14 @@ public class SecurityConfig {
         });
     }
 
-
     // entry point of the api
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(configurer->configurer
-                .requestMatchers("/swagger-ui/**", "/v3/api/docs/**", "/swagger-resources/**", "/webjars/**", "/docs").permitAll()
-
+                .requestMatchers("/api/auth/**","/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**", "/docs").permitAll()
+                .anyRequest().authenticated()
         );
+
         http.csrf(csrf-> csrf.disable());
 
         http.exceptionHandling(exceptionHandling->
